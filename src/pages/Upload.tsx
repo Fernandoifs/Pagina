@@ -54,5 +54,4 @@ function Upload() {
     </div>
   );
 }
-
 export default Upload;

@@ -3,15 +3,31 @@ const fs = require("fs");
 
 const processImage = async (imagePath) => {
   try {
-    const { data: { text } } = await Tesseract.recognize(imagePath, "eng", {
-      logger: (m) => console.log(m), // Logger para acompanhar o progresso
+    // Processa a imagem utilizando o Tesseract.js
+    const { data } = await Tesseract.recognize(imagePath, "por", {
+      psm: 0,  // Modo automático de segmentação de página (tente psm: 0, 6, 11)
+      tessedit_char_whitelist: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ÁáÉéÍíÓóÚúÀàÇç.,!?()[]{}:;\"'",
+      logger: (m) => console.log(m) // Para depuração do processo
     });
 
-    // Após o processamento, remova o arquivo local
+    // Exibe a resposta completa para depuração
+    console.log("Resposta completa:", data);
+
+    const { text, words, hocr, tsv, psm, oem, confidence, version } = data;
+
+    console.log("Texto extraído:", text);
+    console.log("Palavras extraídas:", words);  // Verifique se a propriedade words está presente
+
+    if (!words || words.length === 0) {
+      console.warn("Nenhuma palavra extraída. Verifique a configuração do Tesseract.");
+    }
+
+    // Remover o arquivo de imagem após o processamento
     fs.unlinkSync(imagePath);
 
-    return text;
-  } catch (error) {
+    return { text, words, hocr, tsv, psm, oem, confidence, version }; // Retorna a resposta completa
+  } catch (error) { 
+    console.error("Erro ao processar imagem:", error.message);
     throw new Error("Erro ao processar imagem: " + error.message);
   }
 };

@@ -24,4 +24,4 @@ function Display() {
   )
 }
 
-export default Display
+export default Display;
