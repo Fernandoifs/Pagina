@@ -1,0 +1,11 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "noImplicitAny": false, // Permite inferência de tipos quando não há um tipo explícito
+    "strict": false         // Desativa verificações de tipo estritas
+  }
+}
